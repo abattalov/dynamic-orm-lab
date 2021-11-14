@@ -3,16 +3,17 @@ require 'active_support/inflector'
 
 class InteractiveRecord
 
-    def self.table_name
-        self.to_s.downcase.pluralize
-    end
 
     # Created a class method which defines a table name
     # by taking the name of the class, converting it into a string
     # then making it all lowercase and pluralizing it with the inflector gem.
 
+    def self.table_name
+        self.to_s.downcase.pluralize
+    end
+
     def self.column_names
-        DB[:conn].results_as_hash = true
+        DB[:conn].results_as_hash = true #Grab the results from db and convert into a array of hashes
 
         sql = "pragma table_info('#{table_name}')"
 
@@ -21,7 +22,7 @@ class InteractiveRecord
         table_info.each do |row|
             cloumn_names << row["name"]
         end
-        cloumn_names.compact
+        cloumn_names.compact # .compact gets rid of any nil values
     end
 
     # Class method that retrieves column names from the db to convert into attr_accessors
